@@ -1,0 +1,66 @@
+.App-body-landing {
+  background-position: center;
+  min-height: 100vh;
+  min-width: 90vw;
+  overflow: hidden;
+}
+
+.textLanding {
+  color: white;
+  margin-top: 4rem;
+}
+
+.Box-Form {
+  width: 80vw;
+  background: #ecf0f1;
+  margin: auto;
+  margin-top: -2rem;
+  padding: 1rem;
+}
+
+.image-upload > input {
+  display: none;
+}
+
+.ListKereta {
+  width: 70rem;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.App-img {
+  margin-left: 9rem;
+}
+
+.Modal-reg {
+  height: 70vh;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.APP-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.APP-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 7rem;
+  padding: 1rem;
+  z-index: 1;
+}
+
+.APP-dropdown:hover .APP-dropdown-content {
+  display: block;
+}
+
+.modal-dialog {
+  width: 1000px;
+  margin: 30px auto;
+}
+
+.cardKereta:hover {
+  background: rgba(189, 195, 199, 0.5);
+}
