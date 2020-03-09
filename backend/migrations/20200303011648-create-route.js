@@ -10,7 +10,7 @@ module.exports = {
       },
       origin: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       departure: {
         allowNull: false,

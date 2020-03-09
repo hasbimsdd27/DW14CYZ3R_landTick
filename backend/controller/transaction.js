@@ -18,7 +18,6 @@ const MakeCode = length => {
 
 exports.buyTicket = async (req, res) => {
   try {
-    const id = req.user;
     const {
       id_train,
       departure_date,
@@ -45,8 +44,19 @@ exports.buyTicket = async (req, res) => {
       updatedAt: new Date()
     });
     const detailTrx = await Transaction.findOne({
-      where: { id_user: id, id_train, seats_order, departure_date },
-      attributes: ["id", "seats_order", "departure_date", "status"],
+      where: {
+        id_train,
+        departure_date,
+        status,
+        id_user,
+        seats_order,
+        destination,
+        route_id,
+        origin,
+        total
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+
       include: [
         {
           model: Station,
@@ -79,15 +89,9 @@ exports.buyTicket = async (req, res) => {
         }
       ]
     });
-    const route = await Route.findOne({
-      raw: true,
-      where: { origin, destination }
-    });
-    const totalPayment = route.price * seats_order;
     res.status(201).send({
       message: "transaction successfully created",
-      data: detailTrx,
-      totalPayment
+      data: detailTrx
     });
   } catch (err) {
     console.log(err);

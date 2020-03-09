@@ -43,6 +43,10 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: "id",
       as: "route"
     });
+    transaction.hasMany(models.passanger, {
+      foreignKey: "transaction_code",
+      as: "passanger"
+    });
   };
   return transaction;
 };

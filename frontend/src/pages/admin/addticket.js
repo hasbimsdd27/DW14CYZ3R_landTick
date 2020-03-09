@@ -24,6 +24,11 @@ const Transaction = props => {
   const handleLogout = e => {
     e.preventDefault();
     localStorage.removeItem("token");
+    localStorage.removeItem("tiket");
+    localStorage.removeItem("baby");
+    localStorage.removeItem("adult");
+    localStorage.removeItem("routeID");
+    localStorage.removeItem("departure");
     props.logout();
     window.location.reload();
   };

@@ -1,15 +1,51 @@
+exports.GetDate = () => {
+  const dateNow = new Date().toString().split(" ");
+  switch (dateNow[1]) {
+    case "Jan":
+      return `${parseInt(dateNow[3])}-01-${dateNow[2]}`;
+    case "Feb":
+      return `${parseInt(dateNow[3])}-02-${dateNow[2]}`;
+    case "Mar":
+      return `${parseInt(dateNow[3])}-03-${dateNow[2]}`;
+    case "Apr":
+      return `${parseInt(dateNow[3])}-04-${dateNow[2]}`;
+    case "May":
+      return `${parseInt(dateNow[3])}-05-${dateNow[2]}`;
+    case "Jun":
+      return `${parseInt(dateNow[3])}-06-${dateNow[2]}`;
+    case "Jul":
+      return `${parseInt(dateNow[3])}-07-${dateNow[2]}`;
+    case "Aug":
+      return `${parseInt(dateNow[3])}-08-${dateNow[2]}`;
+    case "Sep":
+      return `${parseInt(dateNow[3])}-09-${dateNow[2]}`;
+    case "Oct":
+      return `${parseInt(dateNow[3])}-10-${dateNow[2]}`;
+    case "Nov":
+      return `${parseInt(dateNow[3])}-11-${dateNow[2]}`;
+    case "Des":
+      return `${parseInt(dateNow[3])}-12-${dateNow[4]}`;
+
+    default:
+      break;
+  }
+};
+
 exports.DurasiPerjalanan = ({ departure, arrival }) => {
   const timeDept = departure.split(":");
   const timeArr = arrival.split(":");
   let sisaJam = null;
+  let jamUtama = parseInt(timeArr[0]);
   let menit = parseInt(timeArr[1]) - parseInt(timeDept[1]);
   if (menit < 0) {
     menit = parseInt(timeArr[1]) - parseInt(timeDept[1]) + 60;
-    sisaJam = parseInt(timeArr[0] - 1);
+    sisaJam = jamUtama - 1;
+  } else {
+    sisaJam = jamUtama;
   }
   let jam = sisaJam - parseInt(timeDept[0]);
   if (jam < 0) {
-    jam = sisaJam - parseInt(timeDept[1]) + 24;
+    jam += 24;
   }
   return `${jam}j ${menit}m`;
 };

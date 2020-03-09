@@ -18,7 +18,7 @@ module.exports = {
       },
       id_transaction: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

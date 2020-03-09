@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Route, Redirect } from "react-router-dom";
+import QRCode from "qrcode.react";
 import { getUser } from "../_actions/user";
 import { logout } from "../_actions/auth";
 import { getDetailTicket, uploadPayment } from "../_actions/ticket";
@@ -43,6 +44,10 @@ const Payment = props => {
     e.preventDefault();
     localStorage.removeItem("token");
     localStorage.removeItem("tiket");
+    localStorage.removeItem("baby");
+    localStorage.removeItem("adult");
+    localStorage.removeItem("routeID");
+    localStorage.removeItem("departure");
     props.logout();
     window.location.reload();
   };
@@ -175,17 +180,17 @@ const Payment = props => {
                   <Card>
                     <Card.Body>
                       <Row>
-                        <Col>Argo Wilis x{tiket.seats_order}</Col>
-                        <Col className="text-right">
+                        <Col className="col-7">
+                          {tiket.train.name} x{tiket.seats_order}
+                        </Col>
+                        <Col className="text-right col-5">
                           <IDRcurrency currency={tiket.route.price} />
                         </Col>
                       </Row>
                       <Row style={{ background: "#bdc3c7" }}>
                         <Col>Total</Col>
                         <Col className="text-right">
-                          <IDRcurrency
-                            currency={tiket.route.price * tiket.seats_order}
-                          />
+                          <IDRcurrency currency={tiket.total} />
                         </Col>
                       </Row>
                     </Card.Body>
@@ -215,7 +220,7 @@ const Payment = props => {
                       ]}
                     />
 
-                    <img src={preview} alt="preview" height="100px" />
+                    <img src={preview} alt="-" height="100px" />
                   </div>
                 </Col>
               </Row>
@@ -230,7 +235,13 @@ const Payment = props => {
                         <DateFormat date={tiket.departure_date} />
                       </p>
                     </Col>
-                    <Col>Qr Code</Col>
+                    <Col>
+                      <QRCode
+                        id={tiket.transaction_code}
+                        value={tiket.transaction_code}
+                        size={100}
+                      />
+                    </Col>
                   </Row>
                 </Card.Header>
                 <Card.Body>

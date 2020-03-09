@@ -9,17 +9,19 @@ import {
   Col,
   Card,
   Table,
-  Modal
+  Modal,
+  Dropdown
 } from "react-bootstrap";
 import { Link, Redirect, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { getStation } from "../_actions/station";
 import { getUser } from "../_actions/user";
-import { getTrains, getSpecificTrain } from "../_actions/train";
+import { getAllRoutes, getSpecificRoutes } from "../_actions/route";
 import { postLogin, logout, postRegister } from "../_actions/auth";
 import { buyTicket } from "../_actions/ticket";
 import {
   DurasiPerjalanan,
+  GetDate,
   DateArrival,
   DateFormat,
   TimeFormat,
@@ -29,7 +31,7 @@ import {
 const Landing = (props, action) => {
   useEffect(() => {
     props.getStation();
-    props.getTrains();
+    props.getAllRoutes();
     props.getUser();
   }, []);
 
@@ -37,6 +39,7 @@ const Landing = (props, action) => {
   const [register, setRegister] = useState(false);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const token = localStorage.getItem("token");
 
   const [name, setName] = useState(null);
   const [phone, setPhone] = useState(null);
@@ -48,6 +51,7 @@ const Landing = (props, action) => {
   const [departureDate, setDepartureDate] = useState(GetDate());
   const [confirmation, setConfirmation] = useState(false);
   const [seats, setSeats] = useState(1);
+  const [baby, setBaby] = useState(0);
 
   const stations = props.stations;
   const loginData = props.login;
@@ -69,28 +73,37 @@ const Landing = (props, action) => {
     e.preventDefault();
     localStorage.removeItem("token");
     localStorage.removeItem("tiket");
+    localStorage.removeItem("baby");
+    localStorage.removeItem("adult");
+    localStorage.removeItem("routeID");
+    localStorage.removeItem("departure");
     props.logout();
     window.location.reload();
   };
 
-  const handleBuy = async (id, train_id, price) => {
-    let data = {
-      id_train: train_id,
-      departure_date: departureDate,
-      status: "Waiting Payment",
-      id_user: user.data.id,
-      seats_order: parseInt(seats),
-      destination: parseInt(destination),
-      route_id: id,
-      origin: parseInt(origin),
-      total: seats * price
-    };
-    console.log(data);
-    const res = await props.buyTicket(data);
-    if (res.action.type === `BUY_TICKET_FULFILLED`) {
-      setConfirmation(true);
-    }
-  };
+  // const handleBuy = id => {
+  // let data = {
+  //   id_train: train_id,
+  //   departure_date: departureDate,
+  //   status: "Waiting Payment",
+  //   id_user: user.data.id,
+  //   seats_order: parseInt(seats),
+  //   destination: parseInt(destination),
+  //   route_id: id,
+  //   origin: parseInt(origin),
+  //   total: seats * price
+  // };
+  // if (!loginData.isLogin && !token) {
+  //   setLogin(true);
+  // } else {
+  //   const res = await props.buyTicket(data);
+  //   if (res.action.type === `BUY_TICKET_FULFILLED`) {
+  //     setConfirmation(true);
+  //   }
+  // }
+  //   console.log(id);
+
+  // };
 
   const handleSubmitReg = async e => {
     e.preventDefault();
@@ -110,7 +123,7 @@ const Landing = (props, action) => {
   };
   const handleSearchTrain = e => {
     e.preventDefault();
-    props.getSpecificTrain(origin, destination, departureDate);
+    props.getSpecificRoutes(origin, destination, departureDate);
   };
 
   return loginData.loading ? (
@@ -259,11 +272,44 @@ const Landing = (props, action) => {
                   </Form.Group>
                 </Col>
                 <Col>
-                  <Form.Group controlId="exampleForm.ControlSelect1">
+                  <Form.Group controlId="exampleForm.ControlSelect3">
                     <Form.Label>Bayi</Form.Label>
-                    <Form.Control as="select">
-                      <option value="0">0</option>
-                      <option value="1">1</option>
+                    <Form.Control
+                      as="select"
+                      defaultValue={baby}
+                      onChange={e => setBaby(e.target.value)}
+                    >
+                      {seats == 1 ? (
+                        <>
+                          {" "}
+                          <option value="0">0</option>{" "}
+                          <option value="1">1</option>
+                        </>
+                      ) : seats == 2 ? (
+                        <>
+                          {" "}
+                          <option value="0">0</option>{" "}
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                        </>
+                      ) : seats == 3 ? (
+                        <>
+                          {" "}
+                          <option value="0">0</option>{" "}
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          <option value="0">0</option>{" "}
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="3">4</option>
+                        </>
+                      )}
                     </Form.Control>
                   </Form.Group>
                 </Col>
@@ -277,7 +323,7 @@ const Landing = (props, action) => {
           </Col>
         </Row>
       </div>
-      <div className="ListKereta" style={{ padding: "1rem" }}>
+      <div className="ListKereta container-fluid" style={{ padding: "1rem" }}>
         <Card body>
           <Row>
             <Col className="text-center">
@@ -298,18 +344,18 @@ const Landing = (props, action) => {
           </Row>
         </Card>
 
-        {props.train.loading ? (
+        {props.routes.loading ? (
           <Card body className="mt-3 cardKereta">
             <h5 style={{ margin: "auto", textAlign: "center" }}>Loading...</h5>
           </Card>
-        ) : props.train.data.length === 0 ? (
+        ) : props.routes.data.length === 0 ? (
           <Card body className="mt-3 cardKereta">
             <h5 style={{ margin: "auto", textAlign: "center" }}>
               Data Tidak Ditemukan... :(
             </h5>
           </Card>
         ) : (
-          props.train.data.map((item, index) => (
+          props.routes.data.map((item, index) => (
             <Card body key={index} className="mt-3 cardKereta">
               <Row>
                 <Col>
@@ -370,20 +416,35 @@ const Landing = (props, action) => {
                     <IDRcurrency currency={item.price} />
                   </strong>
                   <br></br>
-                  <Button
-                    className="mt-2"
-                    onClick={() =>
-                      handleBuy(item.id, item.id_train, item.price)
-                    }
-                  >
-                    Beli Tiket
-                  </Button>
+                  <Link to="/booking" className="mt-2">
+                    <Button
+                      onClick={() => [
+                        localStorage.setItem("routeID", item.id),
+                        localStorage.setItem("adult", seats),
+                        localStorage.setItem("baby", baby),
+                        localStorage.setItem("departure", departureDate)
+                      ]}
+                    >
+                      Beli Tiket
+                    </Button>
+                  </Link>
                 </Col>
               </Row>
             </Card>
           ))
         )}
       </div>
+      <Modal show={confirmation} onHide={() => setConfirmation(false)}>
+        <Modal.Body>
+          <div className="text-center">
+            <h4>Pesanan Berhasil Dibuat!!</h4>
+          </div>
+          <div>
+            <p>Silahakan cek di my ticket untuk melakukan proses berikutnya</p>
+          </div>
+        </Modal.Body>
+      </Modal>
+
       <Modal show={login} onHide={() => setLogin(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Login</Modal.Title>
@@ -519,45 +580,12 @@ const BlueContainer = () => {
   );
 };
 
-const GetDate = () => {
-  const dateNow = new Date().toString().split(" ");
-  switch (dateNow[1]) {
-    case "Jan":
-      return `${parseInt(dateNow[3])}-01-${dateNow[2]}`;
-    case "Feb":
-      return `${parseInt(dateNow[3])}-02-${dateNow[2]}`;
-    case "Mar":
-      return `${parseInt(dateNow[3])}-03-${dateNow[2]}`;
-    case "Apr":
-      return `${parseInt(dateNow[3])}-04-${dateNow[2]}`;
-    case "May":
-      return `${parseInt(dateNow[3])}-05-${dateNow[2]}`;
-    case "Jun":
-      return `${parseInt(dateNow[3])}-06-${dateNow[2]}`;
-    case "Jul":
-      return `${parseInt(dateNow[3])}-07-${dateNow[2]}`;
-    case "Aug":
-      return `${parseInt(dateNow[3])}-08-${dateNow[2]}`;
-    case "Sep":
-      return `${parseInt(dateNow[3])}-09-${dateNow[2]}`;
-    case "Oct":
-      return `${parseInt(dateNow[3])}-10-${dateNow[2]}`;
-    case "Nov":
-      return `${parseInt(dateNow[3])}-11-${dateNow[2]}`;
-    case "Des":
-      return `${parseInt(dateNow[3])}-12-${dateNow[4]}`;
-
-    default:
-      break;
-  }
-};
-
 const mapStateToProps = state => {
   return {
     stations: state.stations,
     login: state.login,
     user: state.user,
-    train: state.train
+    routes: state.routes
   };
 };
 
@@ -568,9 +596,9 @@ const mapDispatchToProps = dispatch => {
     getUser: () => dispatch(getUser()),
     logout: () => dispatch(logout()),
     postRegister: data => dispatch(postRegister(data)),
-    getTrains: () => dispatch(getTrains()),
-    getSpecificTrain: (origin, destination, departureDate) =>
-      dispatch(getSpecificTrain(origin, destination, departureDate)),
+    getAllRoutes: () => dispatch(getAllRoutes()),
+    getSpecificRoutes: (origin, destination, departureDate) =>
+      dispatch(getSpecificRoutes(origin, destination, departureDate)),
     buyTicket: data => dispatch(buyTicket(data))
   };
 };

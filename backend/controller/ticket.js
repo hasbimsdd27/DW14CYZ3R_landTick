@@ -10,7 +10,15 @@ exports.getTicket = async (req, res) => {
     const id_user = req.user;
     const dataTicket = await Transaction.findAll({
       where: { id_user },
-      attributes: ["id", "seats_order", "departure_date", "status"],
+      attributes: [
+        "id",
+        "image_name",
+        "transaction_code",
+        "total",
+        "seats_order",
+        "departure_date",
+        "status"
+      ],
       include: [
         {
           model: Station,

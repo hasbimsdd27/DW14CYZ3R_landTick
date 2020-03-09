@@ -1,15 +1,34 @@
 const express = require("express");
 const router = express.Router();
 const { coba } = require("../controller/coba");
-const {
-  getTrain,
-  getAllTrain,
-  getSpecificTrain
-} = require("../controller/train");
+const { getTrain } = require("../controller/train");
 const { login, register } = require("../controller/auth");
-const { addStation, getAllStation } = require("../controller/station");
+const {
+  addStation,
+  getAllStation,
+  deleteStation,
+  detailStation,
+  updateStation
+} = require("../controller/station");
 const { auth, authAdmin } = require("../middleware/auth");
 const { detailUser } = require("../controller/user");
+const {
+  getAllTrainRoute,
+  getSpecificTrainRoute,
+  updateRoute,
+  addRoute,
+  deleteRoute,
+  detailRoute
+} = require("../controller/route");
+
+const {
+  getAllTrain,
+  detailTrain,
+  updateTrain,
+  deleteTrain,
+  addTrain
+} = require("../controller/train");
+const { BulkInsert } = require("../controller/passanger");
 
 const { uploadPayment } = require("../controller/upload");
 const {
@@ -25,14 +44,28 @@ const { getTicket, getDetailTiket } = require("../controller/ticket");
 router.post("/login", login);
 router.post("/register", register);
 
-//get train
+//route
 // router.get("/train", auth, getTrain);
+router.get("/routes", getAllTrainRoute);
+router.get("/route/:origin/:destination/:date", getSpecificTrainRoute);
+router.get("/route/detail/:id", auth, detailRoute);
+router.post("/route", auth, addRoute);
+router.delete("/route/:id", auth, deleteRoute);
+router.patch("/route/:id", auth, updateRoute);
+
+//train
+router.post("/train", auth, addTrain);
 router.get("/trains", getAllTrain);
-router.get("/train/:origin/:destination/:date", getSpecificTrain);
+router.delete("/train/:id", auth, deleteTrain);
+router.get("/train/:id", auth, detailTrain);
+router.patch("/train/:id", auth, updateTrain);
 
 //add station
-router.post("/station", authAdmin, addStation);
+router.post("/station", auth, addStation);
 router.get("/stations", getAllStation);
+router.delete("/station/:id", auth, deleteStation);
+router.get("/station/:id", auth, detailStation);
+router.patch("/station/:id", auth, updateStation);
 
 router.get("/user", auth, detailUser);
 
@@ -49,5 +82,8 @@ router.get("/transaction/:id", auth, getDetailTransaction);
 
 //upload
 router.post("/uploadfile/:id", uploadPayment);
+
+//passanger
+router.post("/passanger", BulkInsert);
 
 module.exports = router;

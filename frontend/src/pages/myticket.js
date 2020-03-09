@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import QRCode from "qrcode.react";
 import { Route, Redirect, Link } from "react-router-dom";
 import { getUser } from "../_actions/user";
 import { logout } from "../_actions/auth";
@@ -16,12 +17,7 @@ import {
   Table
 } from "react-bootstrap";
 
-import {
-  StatusPembayaran,
-  DateArrival,
-  DateFormat,
-  TimeFormat
-} from "../utils/extra";
+import { DateArrival, DateFormat, TimeFormat } from "../utils/extra";
 
 const MyTicket = props => {
   useEffect(() => {
@@ -37,6 +33,10 @@ const MyTicket = props => {
     e.preventDefault();
     localStorage.removeItem("token");
     localStorage.removeItem("tiket");
+    localStorage.removeItem("baby");
+    localStorage.removeItem("adult");
+    localStorage.removeItem("routeID");
+    localStorage.removeItem("departure");
     props.logout();
     window.location.reload();
   };
@@ -97,7 +97,7 @@ const MyTicket = props => {
       <div>
         <Container className="mt-2">
           <h4>Tiket Saya</h4>
-          {!tiket.data ? (
+          {!tiket.data || tiket.loading ? (
             <h1>Loading...</h1>
           ) : (
             tiket.data.map((item, index) => (
@@ -117,18 +117,18 @@ const MyTicket = props => {
                 </div>
                 <Card.Body style={{ marginTop: "-2rem" }}>
                   <Row>
-                    <Col style={{ maxWidth: "13rem" }}>
+                    <Col className="col-lg-2">
                       <h5>{item.train.name}</h5>
                       <p>{item.train.class}</p>
 
                       <StatusPembayaran payment={item.status} />
                     </Col>
-                    <Col>
+                    <Col className="col-lg-7">
                       <Row>
-                        <Col style={{ maxWidth: "2rem" }}>
+                        <Col className="col-sm-1">
                           <i className="far fa-circle"></i>
                         </Col>
-                        <Col style={{ maxWidth: "10rem" }}>
+                        <Col className="col-md-3">
                           <h5>
                             <TimeFormat time={item.route.departure} />
                           </h5>
@@ -136,16 +136,17 @@ const MyTicket = props => {
                             <DateFormat date={item.departure_date} />
                           </small>
                         </Col>
-                        <Col style={{ maxWidth: "15rem" }}>
+                        <Col className="col-md-6">
                           <h5>{item.originStation.code}</h5>
                           <small>{item.originStation.name}</small>
                         </Col>
                       </Row>
+
                       <Row style={{ marginTop: "1rem" }}>
-                        <Col style={{ maxWidth: "2rem" }}>
+                        <Col className="col-sm-1">
                           <i className="fas fa-circle"></i>
                         </Col>
-                        <Col style={{ maxWidth: "10rem" }}>
+                        <Col className="col-md-3">
                           <h5>
                             <TimeFormat time={item.route.arrival} />
                           </h5>
@@ -157,11 +158,21 @@ const MyTicket = props => {
                             />
                           </small>
                         </Col>
-                        <Col style={{ maxWidth: "15rem" }}>
+                        <Col className="col-md-5">
                           <h5>{item.destinationStation.code}</h5>
                           <small>{item.destinationStation.name}</small>
                         </Col>
                       </Row>
+                    </Col>
+                    <Col></Col>
+                    <Col>
+                      <div className="text-right">
+                        <QRCode
+                          id={item.transaction_code}
+                          value={item.transaction_code}
+                          size={100}
+                        />
+                      </div>
                     </Col>
                   </Row>
 
@@ -202,6 +213,20 @@ const MyTicket = props => {
       </div>
     </div>
   );
+};
+
+const StatusPembayaran = ({ payment }) => {
+  switch (payment) {
+    case "Waiting Payment":
+      return <p className="badge badge-warning text-white">Waiting Payment</p>;
+    case "Paid":
+      return <p className="badge badge-primary text-white">Paid</p>;
+    case "Approved":
+      return <p className="badge badge-success text-white">Approved</p>;
+
+    default:
+      break;
+  }
 };
 
 const mapStateToProps = state => {

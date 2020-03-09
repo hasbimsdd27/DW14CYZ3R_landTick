@@ -1,7 +1,7 @@
 import axios from "axios";
-
+import { baseUrl } from "./constants";
 export const API = axios.create({
-  baseURL: "http://localhost:6969/api/v1"
+  baseURL: `${baseUrl}api/v1`
 });
 
 export const setAuthToken = token => {
