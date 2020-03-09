@@ -1,4 +1,4 @@
-import { INSERT_PASSANGER } from "../config/constants";
+import { INSERT_PASSANGER, GET_ALL_PASSANGER } from "../config/constants";
 
 const initialState = {
   data: [],

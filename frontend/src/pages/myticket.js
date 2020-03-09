@@ -21,8 +21,8 @@ import { DateArrival, DateFormat, TimeFormat } from "../utils/extra";
 
 const MyTicket = props => {
   useEffect(() => {
-    props.getUser();
     props.getMyTicket();
+    props.getUser();
   }, []);
 
   const loginData = props.login;
@@ -97,10 +97,10 @@ const MyTicket = props => {
       <div>
         <Container className="mt-2">
           <h4>Tiket Saya</h4>
-          {!tiket.data || tiket.loading ? (
+          {!props.ticket.myData || props.ticket.loading ? (
             <h1>Loading...</h1>
           ) : (
-            tiket.data.map((item, index) => (
+            props.ticket.myData.map((item, index) => (
               <Card className="mt-3" key={index}>
                 <div style={{ padding: "1rem" }}>
                   <Row>

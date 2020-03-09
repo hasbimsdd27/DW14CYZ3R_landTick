@@ -7,7 +7,7 @@ import { buyTicket } from "../_actions/ticket";
 import { detailRoute } from "../_actions/route";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { DateArrival, DateFormat, TimeFormat } from "../utils/extra";
+import { DateArrival, DateFormat, TimeFormat, MakeCode } from "../utils/extra";
 
 import {
   Navbar,
@@ -36,6 +36,7 @@ const Booking = props => {
   const routeID = localStorage.getItem("routeID");
   const user = props.user;
   const route = props.routes;
+  const transaction_code = MakeCode(10);
   const adult = localStorage.getItem("adult");
   const [name1, setName1] = useState(null);
   const [name2, setName2] = useState(null);
@@ -54,9 +55,10 @@ const Booking = props => {
     window.location.reload();
   };
 
-  const handleData = async e => {
+  const handleData = e => {
     e.preventDefault();
     let data = {
+      transaction_code,
       id_train: route.detail.id_train,
       departure_date: localStorage.getItem("departure"),
       status: "Waiting Payment",
@@ -67,41 +69,41 @@ const Booking = props => {
       origin: route.detail.origin,
       total: adult * route.detail.price
     };
-    const res = await props.buyTicket(data);
-    if (res.action.type == "BUY_TICKET_FULFILLED") {
-      let mainData = [];
+    const res = props.buyTicket(data);
 
-      let data1 = {
-        name: name1,
-        identity: identity1,
-        id_transaction: props.ticket.data.transaction_code
-      };
-      let data2 = {
-        name: name2,
-        identity: identity2,
-        id_transaction: props.ticket.data.transaction_code
-      };
-      let data3 = {
-        name: name3,
-        identity: identity3,
-        id_transaction: props.ticket.data.transaction_code
-      };
-      let data4 = {
-        name: name4,
-        identity: identity4,
-        id_transaction: props.ticket.data.transaction_code
-      };
-      if (adult == 1) {
-        mainData.push(data1);
-      } else if (adult == 2) {
-        mainData.push(data1, data2);
-      } else if (adult == 3) {
-        mainData.push(data1, data2, data3);
-      } else {
-        mainData.push(data1, data2, data3, data4);
-      }
-      console.log(props.tiket.data);
+    let mainData = [];
+
+    let data1 = {
+      name: name1,
+      identity: identity1,
+      id_transaction: transaction_code
+    };
+    let data2 = {
+      name: name2,
+      identity: identity2,
+      id_transaction: transaction_code
+    };
+    let data3 = {
+      name: name3,
+      identity: identity3,
+      id_transaction: transaction_code
+    };
+    let data4 = {
+      name: name4,
+      identity: identity4,
+      id_transaction: transaction_code
+    };
+    if (adult == 1) {
+      mainData.push(data1);
+    } else if (adult == 2) {
+      mainData.push(data1, data2);
+    } else if (adult == 3) {
+      mainData.push(data1, data2, data3);
+    } else {
+      mainData.push(data1, data2, data3, data4);
     }
+    props.insertPassanger(mainData);
+    setMessage(true);
   };
 
   return !loginData.isLogin && !token ? (
@@ -517,7 +519,25 @@ const Booking = props => {
         </div>
       </Container>
       <Modal show={message} onHide={() => setMessage(false)}>
-        <Modal.Body>Gambar Telah di Unggah</Modal.Body>
+        <Modal.Body>
+          Tiket berhasil diproses. Silahakan cek <strong>My-Ticket</strong>{" "}
+          untuk melanjutkan pembayaran
+        </Modal.Body>
+        <Modal.Footer>
+          <Link to="/my-ticket">
+            <Button
+              onClick={() => [
+                localStorage.removeItem("tiket"),
+                localStorage.removeItem("baby"),
+                localStorage.removeItem("adult"),
+                localStorage.removeItem("routeID"),
+                localStorage.removeItem("departure")
+              ]}
+            >
+              Tutup
+            </Button>
+          </Link>
+        </Modal.Footer>
       </Modal>
     </div>
   );

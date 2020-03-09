@@ -161,3 +161,14 @@ exports.IDRcurrency = ({ currency }) => {
   let money = new Intl.NumberFormat(["ban", "id"]).format(currency);
   return `Rp. ${money}`;
 };
+
+exports.MakeCode = length => {
+  let result = "DO-Line-";
+  let characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+};

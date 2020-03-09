@@ -4,21 +4,12 @@ const Train = models.train;
 const User = models.user;
 const Route = models.route;
 const Transaction = models.transaction;
-
-const MakeCode = length => {
-  let result = "DO-Line-";
-  let characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
+const Passanger = models.passanger;
 
 exports.buyTicket = async (req, res) => {
   try {
     const {
+      transaction_code,
       id_train,
       departure_date,
       status,
@@ -30,7 +21,7 @@ exports.buyTicket = async (req, res) => {
       total
     } = req.body;
     await Transaction.create({
-      transaction_code: MakeCode(10),
+      transaction_code,
       id_train,
       departure_date,
       status,
@@ -55,7 +46,6 @@ exports.buyTicket = async (req, res) => {
         origin,
         total
       },
-      attributes: { exclude: ["createdAt", "updatedAt"] },
 
       include: [
         {

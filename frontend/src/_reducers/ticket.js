@@ -8,6 +8,7 @@ import {
 const initialState = {
   data: [],
   detail: [],
+  myData: [],
   loading: false,
   error: false
 };
@@ -22,7 +23,6 @@ const tickets = (state = initialState, action) => {
         ...state,
         loading: true
       };
-    case `${GET_MY_TICKET}_FULFILLED`:
     case `${BUY_TICKET}_FULFILLED`:
       return {
         ...state,
@@ -45,7 +45,12 @@ const tickets = (state = initialState, action) => {
         detail: action.payload,
         loading: false
       };
-
+    case `${GET_MY_TICKET}_FULFILLED`:
+      return {
+        ...state,
+        myData: action.payload,
+        loading: false
+      };
     default:
       return state;
   }

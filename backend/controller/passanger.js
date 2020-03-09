@@ -19,3 +19,22 @@ exports.BulkInsert = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.getAllbyCode = async (req, res) => {
+  try {
+    const { id_transaction } = req.params;
+    const result = await Passanger.findAll({
+      where: { id_transaction },
+      attributes: { exclude: ["createdAt", "updatedAt"] }
+    });
+    if (result) {
+      res
+        .status(201)
+        .send({ message: "get all passanger success", data: result });
+    } else {
+      throw new err();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
