@@ -242,8 +242,8 @@ const MyTicket = props => {
                   props.passanger.detail.map((item, index) => (
                     <tr key={index}>
                       <td>{index + 1}</td>
-                      <td>{item.name}</td>
                       <td>{item.identity}</td>
+                      <td>{item.name}</td>
                     </tr>
                   ))
                 )}

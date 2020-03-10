@@ -128,14 +128,14 @@ const Station = props => {
                   </div>
                   <div className="mt-2 mb-2">
                     {" "}
-                    <Link to="/route">
-                      <h6>Rute</h6>
+                    <Link to="/train">
+                      <h6>Kereta Api</h6>
                     </Link>
                   </div>
                   <div className="mt-2 mb-2">
                     {" "}
-                    <Link to="/train">
-                      <h6>Kereta Api</h6>
+                    <Link to="/route">
+                      <h6>Rute</h6>
                     </Link>
                   </div>
                   <hr></hr>

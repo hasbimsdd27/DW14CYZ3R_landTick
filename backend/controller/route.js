@@ -191,6 +191,7 @@ exports.updateRoute = async (req, res) => {
       price,
       id_train
     } = req.body;
+    console.log({ origin, departure, destination, arrival, price, id_train });
     const dataUser = await User.findOne({ where: { id: idUser } });
     if (dataUser.level !== "admin") {
       throw new err();
@@ -199,7 +200,8 @@ exports.updateRoute = async (req, res) => {
         { origin, departure, destination, arrival, price, id_train },
         { where: { id } }
       );
-      trainData = await Route.findAll({
+
+      const trainData = await Route.findAll({
         attributes: {
           exclude: ["createdAt", "updatedAt", "origin", "destination"]
         },
@@ -222,7 +224,7 @@ exports.updateRoute = async (req, res) => {
         ]
       });
       res.status(200).send({
-        message: "Update Station Success",
+        message: "Update Route Success",
         data: trainData
       });
     }

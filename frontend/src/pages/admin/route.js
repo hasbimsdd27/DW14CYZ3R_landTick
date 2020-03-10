@@ -80,8 +80,8 @@ const AdmRoutes = props => {
   const handleEdit = async (e, id) => {
     e.preventDefault();
     const data = { origin, departure, destination, arrival, id_train, price };
-    console.log(data);
-    const res = await props.updateTrain(data, id);
+    console.log(data, id);
+    const res = await props.updateRoute(data, id);
     if (res.action.type === "UPDATE_ROUTE_FULFILLED") {
       setmodalEdit(false);
     }
@@ -137,16 +137,17 @@ const AdmRoutes = props => {
                   </div>
                   <div className="mt-2 mb-2">
                     {" "}
-                    <Link to="/route">
-                      <h6>Rute</h6>
-                    </Link>
-                  </div>
-                  <div className="mt-2 mb-2">
-                    {" "}
                     <Link to="/train">
                       <h6>Kereta Api</h6>
                     </Link>
                   </div>
+                  <div className="mt-2 mb-2">
+                    {" "}
+                    <Link to="/route">
+                      <h6>Rute</h6>
+                    </Link>
+                  </div>
+
                   <hr></hr>
                   <div className="mt-2 mb-2">
                     {" "}
@@ -427,7 +428,7 @@ const AdmRoutes = props => {
             <Modal.Footer>
               <Button
                 variant="primary"
-                onClick={e => handleEdit(e, train.detail.id)}
+                onClick={e => handleEdit(e, route.detail.id)}
               >
                 Save Changes
               </Button>
