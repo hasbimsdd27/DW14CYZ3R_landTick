@@ -218,7 +218,9 @@ const Landing = (props, action) => {
                   </Form.Group>
                 </Col>
                 <Col className="col-sm-2">
-                  <Button className="mt-4 ml-4">Switch</Button>
+                  <Button className="mt-4 ml-4">
+                    <i class="fas fa-exchange-alt"></i>
+                  </Button>
                 </Col>
                 <Col>
                   <Form.Group controlId="exampleForm.ControlSelect2">
@@ -416,18 +418,20 @@ const Landing = (props, action) => {
                     <IDRcurrency currency={item.price} />
                   </strong>
                   <br></br>
-                  <Link to="/booking" className="mt-2">
-                    <Button
-                      onClick={() => [
-                        localStorage.setItem("routeID", item.id),
-                        localStorage.setItem("adult", seats),
-                        localStorage.setItem("baby", baby),
-                        localStorage.setItem("departure", departureDate)
-                      ]}
-                    >
-                      Beli Tiket
-                    </Button>
-                  </Link>
+                  {user.data ? (
+                    <Link to="/booking" className="mt-2">
+                      <Button
+                        onClick={() => [
+                          localStorage.setItem("routeID", item.id),
+                          localStorage.setItem("adult", seats),
+                          localStorage.setItem("baby", baby),
+                          localStorage.setItem("departure", departureDate)
+                        ]}
+                      >
+                        Beli Tiket
+                      </Button>
+                    </Link>
+                  ) : null}
                 </Col>
               </Row>
             </Card>

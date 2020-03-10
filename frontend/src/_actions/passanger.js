@@ -14,13 +14,13 @@ export const insertPassanger = dataSend => {
   };
 };
 
-export const getAllPassanger = dataSend => {
+export const getAllPassanger = id_transaction => {
   const token = localStorage.getItem("token");
   return {
     type: GET_ALL_PASSANGER,
     payload: async () => {
       setAuthToken(token);
-      const res = await API.get(`/passangers/`, dataSend);
+      const res = await API.get(`/passanger/${id_transaction}`);
       const { data } = res.data;
       return data;
     }

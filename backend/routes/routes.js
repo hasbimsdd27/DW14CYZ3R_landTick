@@ -28,7 +28,7 @@ const {
   deleteTrain,
   addTrain
 } = require("../controller/train");
-const { BulkInsert } = require("../controller/passanger");
+const { BulkInsert, getAllbyCode } = require("../controller/passanger");
 
 const { uploadPayment } = require("../controller/upload");
 const {
@@ -85,5 +85,6 @@ router.post("/uploadfile/:id", uploadPayment);
 
 //passanger
 router.post("/passanger", BulkInsert);
+router.get("/passanger/:id_transaction", getAllbyCode);
 
 module.exports = router;

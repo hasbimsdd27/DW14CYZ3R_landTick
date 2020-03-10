@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
   passanger.associate = function(models) {
     passanger.belongsTo(models.transaction, {
       foreignKey: "id_transaction",
-      sourceKey: "transaction_code"
+      sourceKey: "transaction_code",
+      as: "transaction"
     });
   };
   return passanger;

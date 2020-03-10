@@ -45,6 +45,8 @@ module.exports = (sequelize, DataTypes) => {
     });
     transaction.hasMany(models.passanger, {
       foreignKey: "id_transaction",
+      sourceKey: "transaction_code",
+      onDelete: "CASCADE",
       as: "passanger"
     });
   };
