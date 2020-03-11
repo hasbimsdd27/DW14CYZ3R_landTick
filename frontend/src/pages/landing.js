@@ -8,9 +8,7 @@ import {
   Row,
   Col,
   Card,
-  Table,
-  Modal,
-  Dropdown
+  Modal
 } from "react-bootstrap";
 import { Link, Redirect, Route } from "react-router-dom";
 import { connect } from "react-redux";
@@ -27,6 +25,8 @@ import {
   TimeFormat,
   IDRcurrency
 } from "../utils/extra";
+import Loading from "../utils/loading";
+import RemainingSeats from "../utils/RemainingSeats";
 
 const Landing = (props, action) => {
   useEffect(() => {
@@ -56,6 +56,13 @@ const Landing = (props, action) => {
   const stations = props.stations;
   const loginData = props.login;
   const user = props.user;
+
+  const handleSwitch = () => {
+    setOrigin(destination);
+    setDestination(origin);
+    console.log(origin, destination);
+  };
+
   const handleSubmit = async e => {
     e.preventDefault();
     let data = {
@@ -81,30 +88,6 @@ const Landing = (props, action) => {
     window.location.reload();
   };
 
-  // const handleBuy = id => {
-  // let data = {
-  //   id_train: train_id,
-  //   departure_date: departureDate,
-  //   status: "Waiting Payment",
-  //   id_user: user.data.id,
-  //   seats_order: parseInt(seats),
-  //   destination: parseInt(destination),
-  //   route_id: id,
-  //   origin: parseInt(origin),
-  //   total: seats * price
-  // };
-  // if (!loginData.isLogin && !token) {
-  //   setLogin(true);
-  // } else {
-  //   const res = await props.buyTicket(data);
-  //   if (res.action.type === `BUY_TICKET_FULFILLED`) {
-  //     setConfirmation(true);
-  //   }
-  // }
-  //   console.log(id);
-
-  // };
-
   const handleSubmitReg = async e => {
     e.preventDefault();
     let data = {
@@ -126,10 +109,10 @@ const Landing = (props, action) => {
     props.getSpecificRoutes(origin, destination, departureDate);
   };
 
-  return loginData.loading ? (
-    <h1>Loading</h1>
-  ) : user.loading ? (
-    <h1>Loading</h1>
+  return loginData.loading || user.loading ? (
+    <h1>
+      <Loading />
+    </h1>
   ) : user.data.level === "admin" ? (
     <Route>
       <Redirect
@@ -206,6 +189,7 @@ const Landing = (props, action) => {
                     <Form.Label>Asal</Form.Label>
                     <Form.Control
                       as="select"
+                      value={origin}
                       onChange={e => setOrigin(e.target.value)}
                     >
                       <option value="">-Pilih Stasiun Asal-</option>
@@ -218,7 +202,7 @@ const Landing = (props, action) => {
                   </Form.Group>
                 </Col>
                 <Col className="col-sm-2">
-                  <Button className="mt-4 ml-4">
+                  <Button className="mt-4 ml-4" onClick={handleSwitch}>
                     <i class="fas fa-exchange-alt"></i>
                   </Button>
                 </Col>
@@ -227,6 +211,7 @@ const Landing = (props, action) => {
                     <Form.Label>Tujuan</Form.Label>
                     <Form.Control
                       as="select"
+                      value={destination}
                       onChange={e => setDestination(e.target.value)}
                     >
                       <option value="">-Pilih Stasiun Tujuan-</option>
@@ -254,9 +239,9 @@ const Landing = (props, action) => {
                   </Form.Group>
                 </Col>
                 <Col>
-                  <Form.Group controlId="formBasicCheckbox">
+                  {/* <Form.Group controlId="formBasicCheckbox">
                     <Form.Check type="checkbox" label="Pulang Pergi" />
-                  </Form.Group>
+                  </Form.Group> */}
                 </Col>
                 <Col>
                   <Form.Group controlId="exampleForm.ControlSelect3">
@@ -363,9 +348,14 @@ const Landing = (props, action) => {
                 <Col>
                   <strong>{item.trainName.name}</strong>
                   <br></br>
-                  <small>
-                    {item.trainName.class} | {item.trainName.seat} seat
-                  </small>
+                  <small>{item.trainName.class}</small>
+                  <br></br>
+                  {/* <Button
+                    className="btn btn-primary btn-sm mt-1"
+                    onClick={e => console.log(item.id_train)}
+                  >
+                    Cek Jumlah Kursi
+                  </Button> */}
                 </Col>
                 <Col className="text-center">
                   <strong>

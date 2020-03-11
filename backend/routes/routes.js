@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const { coba } = require("../controller/coba");
 const { getTrain } = require("../controller/train");
 const { login, register } = require("../controller/auth");
 const {
@@ -38,11 +37,20 @@ const {
   UpdatePayment,
   userUpdatePayment
 } = require("../controller/transaction");
-const { getTicket, getDetailTiket } = require("../controller/ticket");
+const {
+  getTicket,
+  getDetailTiket,
+  getTicket1,
+  getTicket2,
+  getTicket3
+} = require("../controller/ticket");
 
+const { RemainingSeats } = require("../controller/remainingseats");
 //login register
 router.post("/login", login);
 router.post("/register", register);
+
+router.get("/purchasedseat/:departureDate", RemainingSeats);
 
 //route
 // router.get("/train", auth, getTrain);
@@ -72,6 +80,9 @@ router.get("/user", auth, detailUser);
 //buy ticket
 router.post("/buyticket", auth, buyTicket);
 router.get("/getmyticket", auth, getTicket);
+router.get("/getmyticket1", auth, getTicket1);
+router.get("/getmyticket2", auth, getTicket2);
+router.get("/getmyticket3", auth, getTicket3);
 router.get("/getdetailtiket/:id", auth, getDetailTiket);
 
 //transactions

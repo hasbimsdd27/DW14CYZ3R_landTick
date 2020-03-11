@@ -28,6 +28,11 @@ module.exports = (sequelize, DataTypes) => {
       sourceKey: "id",
       as: "destinationStation"
     });
+    route.hasMany(models.transaction, {
+      foreignKey: "route_id",
+      sourceKey: "id",
+      as: "transaction"
+    });
   };
   return route;
 };

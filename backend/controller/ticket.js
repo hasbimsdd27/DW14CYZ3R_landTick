@@ -109,3 +109,160 @@ exports.getDetailTiket = async (req, res) => {
     console.log(err);
   }
 };
+
+exports.getTicket3 = async (req, res) => {
+  try {
+    const id_user = req.user;
+    const transactions = await Transaction.findAll({
+      where: { id_user, status: "Approved" },
+      attributes: [
+        "id",
+        "image_name",
+        "transaction_code",
+        "total",
+        "seats_order",
+        "departure_date",
+        "status"
+      ],
+
+      include: [
+        {
+          model: Station,
+          as: "originStation",
+          attributes: { exclude: ["createdAt", "updatedAt"] }
+        },
+        {
+          model: Route,
+          as: "route",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "origin", "destination", "id"]
+          }
+        },
+        {
+          model: Station,
+          as: "destinationStation",
+          attributes: { exclude: ["createdAt", "updatedAt"] }
+        },
+        {
+          model: Train,
+          as: "train",
+          attributes: { exclude: ["createdAt", "updatedAt", "seat"] }
+        },
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "password", "level"]
+          }
+        }
+      ]
+    });
+    res.status(200).send({ message: "ticket found", data: transactions });
+  } catch (err) {
+    console.log(err);
+  }
+};
+exports.getTicket1 = async (req, res) => {
+  try {
+    const id_user = req.user;
+    const transactions = await Transaction.findAll({
+      where: { id_user, status: "Waiting Payment" },
+      attributes: [
+        "id",
+        "image_name",
+        "transaction_code",
+        "total",
+        "seats_order",
+        "departure_date",
+        "status"
+      ],
+
+      include: [
+        {
+          model: Station,
+          as: "originStation",
+          attributes: { exclude: ["createdAt", "updatedAt"] }
+        },
+        {
+          model: Route,
+          as: "route",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "origin", "destination", "id"]
+          }
+        },
+        {
+          model: Station,
+          as: "destinationStation",
+          attributes: { exclude: ["createdAt", "updatedAt"] }
+        },
+        {
+          model: Train,
+          as: "train",
+          attributes: { exclude: ["createdAt", "updatedAt", "seat"] }
+        },
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "password", "level"]
+          }
+        }
+      ]
+    });
+    res.status(200).send({ message: "ticket found", data: transactions });
+  } catch (err) {
+    console.log(err);
+  }
+};
+exports.getTicket2 = async (req, res) => {
+  try {
+    const id_user = req.user;
+    const transactions = await Transaction.findAll({
+      where: { id_user, status: "Paid" },
+      attributes: [
+        "id",
+        "image_name",
+        "transaction_code",
+        "total",
+        "seats_order",
+        "departure_date",
+        "status"
+      ],
+
+      include: [
+        {
+          model: Station,
+          as: "originStation",
+          attributes: { exclude: ["createdAt", "updatedAt"] }
+        },
+        {
+          model: Route,
+          as: "route",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "origin", "destination", "id"]
+          }
+        },
+        {
+          model: Station,
+          as: "destinationStation",
+          attributes: { exclude: ["createdAt", "updatedAt"] }
+        },
+        {
+          model: Train,
+          as: "train",
+          attributes: { exclude: ["createdAt", "updatedAt", "seat"] }
+        },
+        {
+          model: User,
+          as: "user",
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "password", "level"]
+          }
+        }
+      ]
+    });
+    res.status(200).send({ message: "ticket found", data: transactions });
+  } catch (err) {
+    console.log(err);
+  }
+};

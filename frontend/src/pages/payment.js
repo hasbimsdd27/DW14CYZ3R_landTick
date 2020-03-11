@@ -181,7 +181,7 @@ const Payment = props => {
                     <Card.Body>
                       <Row>
                         <Col className="col-7">
-                          {tiket.train.name} x{tiket.seats_order}
+                          {tiket.train.name} x {tiket.seats_order}
                         </Col>
                         <Col className="text-right col-5">
                           <IDRcurrency currency={tiket.route.price} />
@@ -195,12 +195,14 @@ const Payment = props => {
                       </Row>
                     </Card.Body>
                   </Card>
-                  <Button
-                    className="btn btn-block btn-primary mt-1"
-                    onClick={e => uploadImage(e)}
-                  >
-                    Bayar Sekarang
-                  </Button>
+                  {image ? (
+                    <Button
+                      className="btn btn-block btn-primary mt-1"
+                      onClick={e => uploadImage(e)}
+                    >
+                      Bayar Sekarang
+                    </Button>
+                  ) : null}
                 </Col>
                 <Col className="col-md-6">
                   <h4>Upload Bukti Transfer</h4>
@@ -293,9 +295,9 @@ const Payment = props => {
                     </Col>
 
                     <Col>
-                      <h6>Surabaya (SBI)</h6>
+                      <h6>{tiket.destinationStation.code}</h6>
                       <p style={{ marginTop: "-0.5rem", fontSize: "12px" }}>
-                        Stasiun Surabaya Pasar Turi{" "}
+                        {tiket.destinationStation.name}
                       </p>
                     </Col>
                   </Row>
@@ -306,7 +308,16 @@ const Payment = props => {
         </div>
       </Container>
       <Modal show={message} onHide={() => setMessage(false)}>
-        <Modal.Body>Gambar Telah di Unggah</Modal.Body>
+        <Modal.Body className="text-center">
+          <div>
+            <h5>Pembayaran berhasil, silahkan tunggu konfirmasi berikutnya</h5>
+          </div>
+          <div>
+            <Link to="/my-ticket">
+              <Button>Ok</Button>
+            </Link>
+          </div>
+        </Modal.Body>
       </Modal>
     </div>
   );

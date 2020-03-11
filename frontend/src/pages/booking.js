@@ -22,7 +22,7 @@ import {
   Image,
   Modal
 } from "react-bootstrap";
-
+import Loading from "../utils/loading";
 const Booking = props => {
   useEffect(() => {
     const routeID = localStorage.getItem("routeID");
@@ -123,7 +123,7 @@ const Booking = props => {
       />
     </Route>
   ) : route.loading || user.loading || !route.detail ? (
-    <h1>Loading Bos...</h1>
+    <Loading />
   ) : (
     <div className="App-body-landing">
       <Navbar bg="light" expand="lg">

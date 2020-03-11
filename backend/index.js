@@ -6,7 +6,7 @@ const port = process.env.PORT || 5000;
 const route = require("./routes/routes");
 const multer = require("multer");
 app.use(cors());
-var path = require("path");
+const path = require("path");
 
 app.use(express.static(path.resolve("./public")));
 app.use(express.json());

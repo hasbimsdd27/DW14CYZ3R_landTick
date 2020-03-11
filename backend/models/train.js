@@ -22,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       as: "user",
       foreignKey: "id_user"
     });
+    train.hasMany(models.transaction, {
+      as: "purchased_seat",
+      foreignKey: "id_train"
+    });
   };
   return train;
 };

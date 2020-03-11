@@ -12,7 +12,7 @@ import { getUser } from "../../_actions/user";
 import { connect } from "react-redux";
 import { Link, Redirect, Route } from "react-router-dom";
 import { logout } from "../../_actions/auth";
-
+import Loading from "../../utils/loading";
 const Transaction = props => {
   useEffect(() => {
     props.getUser();
@@ -42,7 +42,7 @@ const Transaction = props => {
       />
     </Route>
   ) : user.loading ? (
-    <h1>Loading</h1>
+    <Loading />
   ) : user.data.level !== "admin" ? (
     <Route>
       <Redirect
@@ -66,10 +66,16 @@ const Transaction = props => {
               <div className="APP-dropdown">
                 <h5>{user.data.name}</h5>
                 <div className="APP-dropdown-content">
-                  <div className="mt-2 mb-2">
+                  {/* <div className="mt-2 mb-2">
                     {" "}
                     <Link to="/addticket">
                       <h6>Tambah Tiket</h6>
+                    </Link>
+                  </div> */}
+                  <div className="mt-2 mb-2">
+                    {" "}
+                    <Link to="/station">
+                      <h6>Stasiun</h6>
                     </Link>
                   </div>
                   <div className="mt-2 mb-2">

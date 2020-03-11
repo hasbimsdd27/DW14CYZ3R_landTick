@@ -4,6 +4,7 @@ const Route = models.route;
 const Train = models.train;
 const Station = models.station;
 const User = models.user;
+const Transaction = models.transaction;
 
 exports.addRoute = async (req, res) => {
   try {

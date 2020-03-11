@@ -4,7 +4,12 @@ import { Route, Redirect, Link } from "react-router-dom";
 import { getUser } from "../_actions/user";
 import { logout } from "../_actions/auth";
 import { connect } from "react-redux";
-import { getMyTicket } from "../_actions/ticket";
+import {
+  getMyTicket,
+  getMyTicket1,
+  getMyTicket2,
+  getMyTicket3
+} from "../_actions/ticket";
 import { getAllPassanger } from "../_actions/passanger";
 import {
   Navbar,
@@ -18,13 +23,13 @@ import {
   Modal,
   Table
 } from "react-bootstrap";
-
+import Loading from "../utils/loading";
 import { DateArrival, DateFormat, TimeFormat } from "../utils/extra";
 
 const MyTicket = props => {
   useEffect(() => {
-    props.getMyTicket();
     props.getUser();
+    props.getMyTicket();
   }, []);
 
   const loginData = props.login;
@@ -44,6 +49,17 @@ const MyTicket = props => {
     window.location.reload();
   };
 
+  const handleFilter = () => {
+    const status = localStorage.getItem("status");
+    if (status === "Waiting Payment") {
+      props.getMyTicket1();
+    } else if (status === "Paid") {
+      props.getMyTicket2();
+    } else {
+      props.getMyTicket3();
+    }
+  };
+
   const handlePassanger = (e, id_transaction) => {
     e.preventDefault();
     props.getAllPassanger(id_transaction);
@@ -59,7 +75,7 @@ const MyTicket = props => {
       />
     </Route>
   ) : tiket.loading || user.loading || !tiket.data ? (
-    <h1>Loading Bos...</h1>
+    <Loading />
   ) : (
     <div className="App-body-landing">
       <Navbar bg="light" expand="lg">
@@ -105,7 +121,30 @@ const MyTicket = props => {
       </Navbar>
       <div>
         <Container className="mt-2">
-          <h4>Tiket Saya</h4>
+          <Row>
+            <Col className="col-lg-9">
+              {" "}
+              <h4>Tiket Saya</h4>
+            </Col>
+            <Col className="col-lg-3">
+              <Form.Group>
+                <Form.Control
+                  as="select"
+                  value={localStorage.getItem("status")}
+                  onChange={e => [
+                    localStorage.setItem("status", e.target.value),
+                    handleFilter()
+                  ]}
+                >
+                  <option>-Semua Transaksi-</option>
+                  <option value="Waiting Payment">Waiting Payment</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Approved">Approved</option>
+                </Form.Control>
+              </Form.Group>
+            </Col>
+          </Row>
+
           {!props.ticket.myData || props.ticket.loading ? (
             <h1>Loading...</h1>
           ) : (
@@ -173,7 +212,6 @@ const MyTicket = props => {
                         </Col>
                       </Row>
                     </Col>
-                    <Col></Col>
                     <Col>
                       <div className="text-right">
                         <QRCode
@@ -186,7 +224,7 @@ const MyTicket = props => {
                   </Row>
 
                   <div className="mt-3">
-                    {item.status == "Waiting Payment" ? (
+                    {item.status === "Waiting Payment" ? (
                       <>
                         <Link to="/payment">
                           <Button
@@ -290,7 +328,11 @@ const mapDispatchToProps = dispatch => {
     getUser: () => dispatch(getUser()),
     logout: () => dispatch(logout()),
     getMyTicket: () => dispatch(getMyTicket()),
-    getAllPassanger: id_transaction => dispatch(getAllPassanger(id_transaction))
+    getAllPassanger: id_transaction =>
+      dispatch(getAllPassanger(id_transaction)),
+    getMyTicket1: () => dispatch(getMyTicket1()),
+    getMyTicket2: () => dispatch(getMyTicket2()),
+    getMyTicket3: () => dispatch(getMyTicket3())
   };
 };
 

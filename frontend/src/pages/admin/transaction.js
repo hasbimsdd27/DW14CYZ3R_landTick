@@ -21,7 +21,7 @@ import {
 } from "../../_actions/transaction";
 import { Link, Redirect, Route } from "react-router-dom";
 import { baseUrl } from "../../config/constants";
-
+import Loading from "../../utils/loading";
 import {
   DateArrival,
   DateFormat,
@@ -69,7 +69,7 @@ const AddTicket = props => {
     console.log(data, id);
     const res = await props.patchTransaction(data, id);
     if (res.action.type === "PATCH_TRANSACTION_FULFILLED") {
-      setEdit(false);
+      setDetail(false);
       props.getAllTransaction();
     }
   };
@@ -83,7 +83,7 @@ const AddTicket = props => {
       />
     </Route>
   ) : user.loading || transaction.loading ? (
-    <h1>Loading</h1>
+    <Loading />
   ) : user.data.level !== "admin" ? (
     <Route>
       <Redirect
@@ -105,17 +105,14 @@ const AddTicket = props => {
             <Nav className="mr-auto"></Nav>
             <Form inline>
               <div className="APP-dropdown">
-                <h5 className="text-primary">
-                  {user.data.name}
-                  <i className="fas fa-user ml-2"></i>
-                </h5>
+                <h5>{user.data.name}</h5>
                 <div className="APP-dropdown-content">
-                  <div className="mt-2 mb-2">
+                  {/* <div className="mt-2 mb-2">
                     {" "}
                     <Link to="/addticket">
                       <h6>Tambah Tiket</h6>
                     </Link>
-                  </div>
+                  </div> */}
                   <div className="mt-2 mb-2">
                     {" "}
                     <Link to="/station">
@@ -194,13 +191,6 @@ const AddTicket = props => {
                     >
                       <i className="fas fa-info"></i>
                     </button>
-                    <button
-                      className="btn btn-success"
-                      onClick={() => [loadEditData(item.id), setTrxid(item.id)]}
-                    >
-                      {" "}
-                      <i className="fas fa-edit"></i>
-                    </button>
                   </td>
                 </tr>
               ))}
@@ -214,7 +204,9 @@ const AddTicket = props => {
           </Modal.Header>
           {transaction.loading || !transaction.detail ? (
             <Modal.Body>
-              <h1>Loading</h1>
+              <div className="text-center">
+                <h3>Loading</h3>
+              </div>
             </Modal.Body>
           ) : (
             <Modal.Body>
@@ -354,78 +346,32 @@ const AddTicket = props => {
                   )}
                 </Col>
               </Row>
+              <Row className="mt-2">
+                <Col>
+                  <h6>Status Pembayaran</h6>
+                </Col>
+                <Col>
+                  {" "}
+                  <Form.Group controlId="formSTatus">
+                    <Form.Control
+                      as="select"
+                      defaultValue={transaction.detail.status}
+                      onChange={e => [setStatus(e.target.value)]}
+                    >
+                      <option value="">-Pilih Status-</option>
+                      <option value="Waiting Payment">Waiting Payment</option>
+                      <option value="Paid">Paid</option>
+                      <option value="Approved">Approved</option>
+                    </Form.Control>
+                  </Form.Group>
+                </Col>
+              </Row>
             </Modal.Body>
           )}
 
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setDetail(false)}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={() => setDetail(false)}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
-
-        <Modal show={edit} onHide={() => setEdit(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Row>
-              <Col className="col-md-3">ID transaksi</Col>
-              <Col>
-                <h6>{transaction.detail.id}</h6>
-              </Col>
-            </Row>
-
-            <Row className="mt-3" style={{ padding: "auto" }}>
-              <Col className="col-md-3">Tiket</Col>
-              <Col>
-                {!transaction.detail.originStation &&
-                !transaction.detail.destinationStation ? (
-                  <h6>Loading...</h6>
-                ) : (
-                  <h6>
-                    {transaction.detail.originStation.code} -{" "}
-                    {transaction.detail.destinationStation.code}
-                  </h6>
-                )}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-md-3">Bukti Transfer</Col>
-              <Col>
-                <Form.Group controlId="formBukti">
-                  <Image
-                    src={baseUrl + "images/" + transaction.detail.image_name}
-                    height="150px"
-                    rounded
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col className="col-md-3">Status Pembayaran</Col>
-              <Col>
-                <Form.Group controlId="formSTatus">
-                  <Form.Control
-                    as="select"
-                    defaultValue={transaction.detail.status}
-                    onChange={e => [setStatus(e.target.value)]}
-                  >
-                    <option value="">-Pilih Status-</option>
-                    <option value="Waiting Payment">Waiting Payment</option>
-                    <option value="Paid">Paid</option>
-                    <option value="Approved">Approved</option>
-                  </Form.Control>
-                </Form.Group>
-              </Col>
-            </Row>
-          </Modal.Body>
-          <Modal.Footer>
             <Button variant="primary" onClick={updateTransaction}>
-              Save Changes
+              Save
             </Button>
           </Modal.Footer>
         </Modal>
