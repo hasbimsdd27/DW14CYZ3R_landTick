@@ -26,7 +26,7 @@ Make sure all of these are properly installed in your system.
 | ------------ | ----------------------------------------------------------------------------------- |
 | Git          | [Windows](https://gitforwindows.org/) / [Linux](https://git-scm.com/download/linux) |
 | Node.js      | [Link](https://nodejs.org/en/download/)                                             |
-| React Native | [Link](https://facebook.github.io/react-native/docs/getting-started)                |
+| ReactJS      | [Link](https://reactjs.org/)                                                        |
 | MySQL        | [Link](https://www.mysql.com/downloads/)                                            |
 
 ### Installation
@@ -98,7 +98,7 @@ Wait till the application appear in your browser and now, you can explore Toon K
 
 ## Built With
 
-- [React Native](https://facebook.github.io/react-native/) - Front-end
+- [ReactJS](https://reactjs.org/) - Front-end
 - [Express JS](https://expressjs.com) - Back-end
 - [MySQL](https://www.mysql.com) - Database
 
