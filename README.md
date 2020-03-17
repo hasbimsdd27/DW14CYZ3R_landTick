@@ -94,7 +94,7 @@ Wait till the application appear in your browser and now, you can explore Toon K
 
 ## Screenshots
 
-<img src="docs/screenshots/screenshots.jpg" />
+<img src="docs/screenshot/screenshot.jpg" />
 
 ## Built With
 
