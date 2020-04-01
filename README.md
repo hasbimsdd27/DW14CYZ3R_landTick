@@ -1,6 +1,7 @@
 # DO-Line
 
-An Aplication to help ticket seekers find their train ticket easily.
+An Aplication to help ticket seekers find their train ticket easily.This App now deployed using netlify. The url is [Here](https://doline-hasbi.netlify.com/)
+
 
 ## Table of Contents
 
